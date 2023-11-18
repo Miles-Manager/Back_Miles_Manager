@@ -6,20 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { AuthGuard } from 'src/commons/guards/auth.guard';
+import { AllowAnon } from 'src/commons/decorators/allow-anon.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  
   @Post()
+  @AllowAnon()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
-
+  
   @Get()
   findAll() {
     return this.userService.findAll();

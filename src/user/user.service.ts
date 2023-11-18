@@ -5,7 +5,7 @@ import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
   create(createUserDto: CreateUserDto) {
     try {
@@ -26,6 +26,14 @@ export class UserService {
   findOne(id: string) {
     try {
       return this.userRepository.findOne(id);
+    } catch (error) {
+      throw new Error("Error while fetching user" + error.message);
+    }
+  }
+  
+  findByEmail(email: string) {
+    try {
+      return this.userRepository.findByEmail(email);
     } catch (error) {
       throw new Error("Error while fetching user" + error.message);
     }
