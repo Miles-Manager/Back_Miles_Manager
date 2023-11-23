@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 interface AlreadyExistsExceptionInterface {
   message?: string;
@@ -6,6 +6,6 @@ interface AlreadyExistsExceptionInterface {
 
 export class AlreadyExistsException extends HttpException {
   constructor({ message }: AlreadyExistsExceptionInterface) {
-    super(message ?? "Already Exists", HttpStatus.UNPROCESSABLE_ENTITY);
+    super(message ?? 'Already Exists', HttpStatus.UNPROCESSABLE_ENTITY);
   }
 }

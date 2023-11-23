@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 interface NotFoundExceptionInterface {
   message?: string;
@@ -6,6 +6,6 @@ interface NotFoundExceptionInterface {
 
 export class NotFoundException extends HttpException {
   constructor({ message }: NotFoundExceptionInterface) {
-    super(message ?? "Not Found", HttpStatus.NOT_FOUND);
+    super(message ?? 'Not Found', HttpStatus.NOT_FOUND);
   }
 }

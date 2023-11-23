@@ -5,12 +5,15 @@ import * as bcrypt from 'bcrypt';
 export class BcryptService {
   async hashPassword(password: string): Promise<string> {
     const salt = bcrypt.genSaltSync();
-    const hashedPassword = await bcrypt.hash(password, salt)
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     return hashedPassword;
   }
 
-  async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
+  async comparePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
   }
 }

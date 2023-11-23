@@ -5,7 +5,7 @@ import { AllowAnon } from '../commons/decorators/allow-anon.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/signIn')
   @AllowAnon()

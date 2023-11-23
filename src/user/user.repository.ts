@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/commons/services/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -10,9 +10,7 @@ import { CreatedException } from 'src/commons/exceptions/created.exception';
 
 @Injectable()
 export class UserRepository {
-  constructor(
-    private readonly prismaService: PrismaService,
-  ) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
   #bcryptService = new BcryptService();
 

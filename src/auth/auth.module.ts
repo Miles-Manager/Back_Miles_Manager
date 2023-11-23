@@ -16,12 +16,12 @@ import { AuthGuard } from '../commons/guards/auth.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService,
+  providers: [
+    AuthService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-  ]
+  ],
 })
-
-export class AuthModule { }
+export class AuthModule {}

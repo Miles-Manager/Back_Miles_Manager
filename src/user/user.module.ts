@@ -8,6 +8,6 @@ import { BcryptService } from 'src/commons/services/bcrypt.service';
 @Module({
   controllers: [UserController],
   providers: [UserService, UserRepository, PrismaService, BcryptService],
-  exports: [UserService, UserRepository]
+  exports: [UserService, UserRepository],
 })
-export class UserModule { }
+export class UserModule {}
