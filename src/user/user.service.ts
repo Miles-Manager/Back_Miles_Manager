@@ -11,7 +11,7 @@ export class UserService {
     try {
       return this.userRepository.create(createUserDto);
     } catch (error) {
-      throw new Error("Error while creating user" + error.message);
+      throw new Error('Error while creating user' + error.message);
     }
   }
 
@@ -19,7 +19,7 @@ export class UserService {
     try {
       return this.userRepository.findAll();
     } catch (error) {
-      throw new Error("Error while fetching users" + error.message);
+      throw new Error('Error while fetching users' + error.message);
     }
   }
 
@@ -27,7 +27,15 @@ export class UserService {
     try {
       return this.userRepository.findOne(id);
     } catch (error) {
-      throw new Error("Error while fetching user" + error.message);
+      throw new Error('Error while fetching user' + error.message);
+    }
+  }
+
+  findByEmail(email: string) {
+    try {
+      return this.userRepository.findByEmail(email);
+    } catch (error) {
+      throw new Error('Error while fetching user' + error.message);
     }
   }
 
@@ -35,7 +43,7 @@ export class UserService {
     try {
       return this.userRepository.update(id, updateUserDto);
     } catch (error) {
-      throw new Error("Error while updating user" + error.message);
+      throw new Error('Error while updating user' + error.message);
     }
   }
 
@@ -43,7 +51,7 @@ export class UserService {
     try {
       return this.userRepository.remove(id);
     } catch (error) {
-      throw new Error("Error while deleting user" + error.message);
+      throw new Error('Error while deleting user' + error.message);
     }
   }
 }
