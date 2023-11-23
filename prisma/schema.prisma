@@ -12,6 +12,7 @@ model User {
   email      String    @unique
   password   String
   created_at DateTime  @default(now())
+  role       Role      @default(USER)
   profile    Profile[]
 }
 
@@ -20,4 +21,9 @@ model Profile {
   name   String
   userId String
   user   User   @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
 }
