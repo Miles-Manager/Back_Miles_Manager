@@ -14,7 +14,7 @@ export class UserRepository {
 
   #bcryptService = new BcryptService();
 
-  async create({ email, password }: CreateUserDto): Promise<User> {
+  async create({ email, password, role = "USER" }: CreateUserDto): Promise<User> {
     const userAlreadyExists = await this.prismaService.user.findUnique({
       where: { email },
     });
@@ -26,7 +26,7 @@ export class UserRepository {
     const hashedPassword = await this.#bcryptService.hashPassword(password);
 
     const user = await this.prismaService.user.create({
-      data: { email, password: hashedPassword },
+      data: { email, password: hashedPassword, role },
     });
 
     throw new CreatedException({ object: user });
@@ -66,20 +66,25 @@ export class UserRepository {
     return user;
   }
 
-  async update(id: string, { email, password }: UpdateUserDto): Promise<User> {
+  async update(id: string, { email, role, password }: UpdateUserDto): Promise<User> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
     });
 
+    
     if (!user) {
       throw new NotFoundException({ message: 'User not found' });
     }
+    
+    let userPassword: string = user.password;
 
-    const hashedPassword = await this.#bcryptService.hashPassword(password);
+    if(password) {
+      userPassword = await this.#bcryptService.hashPassword(password);
+    }
 
     return this.prismaService.user.update({
       where: { id },
-      data: { email, password: hashedPassword },
+      data: { email, role, password: userPassword },
     });
   }
 
