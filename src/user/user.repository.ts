@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { AlreadyExistsException } from 'src/commons/exceptions/already-exists.exception';
+import { CreatedException } from 'src/commons/exceptions/created.exception';
+import { NotFoundException } from 'src/commons/exceptions/not-found.exception';
+import { BcryptService } from 'src/commons/services/bcrypt.service';
 import { PrismaService } from 'src/commons/services/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { BcryptService } from 'src/commons/services/bcrypt.service';
-import { NotFoundException } from 'src/commons/exceptions/not-found.exception';
-import { AlreadyExistsException } from 'src/commons/exceptions/already-exists.exception';
-import { CreatedException } from 'src/commons/exceptions/created.exception';
 
 @Injectable()
 export class UserRepository {
@@ -14,7 +14,11 @@ export class UserRepository {
 
   #bcryptService = new BcryptService();
 
-  async create({ email, password, role = "USER" }: CreateUserDto): Promise<User> {
+  async create({
+    email,
+    password,
+    role = 'USER',
+  }: CreateUserDto): Promise<User> {
     const userAlreadyExists = await this.prismaService.user.findUnique({
       where: { email },
     });
@@ -66,19 +70,21 @@ export class UserRepository {
     return user;
   }
 
-  async update(id: string, { email, role, password }: UpdateUserDto): Promise<User> {
+  async update(
+    id: string,
+    { email, role, password }: UpdateUserDto,
+  ): Promise<User> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
     });
 
-    
     if (!user) {
       throw new NotFoundException({ message: 'User not found' });
     }
-    
+
     let userPassword: string = user.password;
 
-    if(password) {
+    if (password) {
       userPassword = await this.#bcryptService.hashPassword(password);
     }
 
