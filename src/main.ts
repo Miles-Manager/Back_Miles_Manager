@@ -1,10 +1,11 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({ origin: 'http://localhost:5173' });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -14,8 +15,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('API inortz MVP')
-    .setDescription('this is iNortz API for MVP')
+    .setTitle('API Miles Manager MVP')
+    .setDescription('this is Miles Manager API for MVP')
     .setVersion('1.0')
     .build();
 

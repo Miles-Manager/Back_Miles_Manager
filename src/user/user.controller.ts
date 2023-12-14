@@ -1,18 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { AllowAnon } from 'src/commons/decorators/allow-anon.decorator';
+import { Roles } from 'src/commons/decorators/roles.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
-import { AllowAnon } from 'src/commons/decorators/allow-anon.decorator';
-import { Roles } from 'src/commons/decorators/roles.decorator';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
