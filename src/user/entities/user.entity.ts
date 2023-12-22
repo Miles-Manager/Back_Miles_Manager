@@ -4,6 +4,6 @@ export class UserEntity implements User {
   cpf: string;
   email: string;
   password: string;
-  created_at: Date;
+  createdAt: Date;
   role: $Enums.Role;
 }

@@ -14,7 +14,7 @@ model User {
   password   String
   role       Role
   profile    Profile[]
-  created_at DateTime  @default(now())
+  createdAt DateTime  @default(now())
 }
 
 model Profile {
