@@ -1,5 +1,13 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { AllowAnon } from '../commons/decorators/allow-anon.decorator';
 import { AuthService } from './auth.service';
 import { SignInDTO } from './dto/sign-in.dto';
@@ -12,7 +20,16 @@ export class AuthController {
   @Post('/signIn')
   @AllowAnon()
   @HttpCode(HttpStatus.OK)
-  signIn(@Body() { email, password }: SignInDTO) {
-    return this.authService.signIn(email, password);
+  async signIn(
+    @Body() { email, password }: SignInDTO,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const signInResponse = await this.authService.signIn(email, password);
+    response.cookie('token', signInResponse.accessToken, {
+      httpOnly: true,
+      // sameSite: 'none',
+      // secure: true,
+    });
+    return signInResponse;
   }
 }
