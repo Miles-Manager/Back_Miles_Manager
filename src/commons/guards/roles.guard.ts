@@ -1,8 +1,8 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { Role } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from '@prisma/client';
+import { ROLES_KEY } from '../decorators/roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -16,15 +16,34 @@ export class RolesGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
     if (!requiredRoles) {
       return true;
     }
-    const [, token] = context
-      .switchToHttp()
-      .getRequest()
-      .headers.authorization.split(' ');
+
+    const request = context.switchToHttp().getRequest();
+
+    const token =
+      this.#extractTokenFromHeader(request) ?? request.cookies['token'];
+
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
     const { user } = this.jwtService.decode(token);
 
     return requiredRoles.some((role) => user.role?.includes(role));
+  }
+
+  #extractTokenFromHeader(request: Request): string | undefined {
+    const authorizationHeader = request.headers['authorization'];
+
+    if (!authorizationHeader) {
+      return undefined;
+    }
+
+    const [type, token] = authorizationHeader?.split(' ');
+
+    return type === 'Bearer' ? token : undefined;
   }
 }
