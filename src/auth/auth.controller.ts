@@ -6,6 +6,7 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AllowAnon } from '../commons/decorators/allow-anon.decorator';
@@ -15,7 +16,10 @@ import { SignInDTO } from './dto/sign-in.dto';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Post('/signIn')
   @AllowAnon()
@@ -25,7 +29,13 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const signInResponse = await this.authService.signIn(email, password);
+
+    const timeToExpire = new Date(
+      this.jwtService.decode(signInResponse.accessToken)['exp'] * 1000,
+    );
+
     response.cookie('token', signInResponse.accessToken, {
+      expires: timeToExpire,
       httpOnly: true,
       // sameSite: 'none',
       // secure: true,

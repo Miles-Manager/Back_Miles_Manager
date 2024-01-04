@@ -12,7 +12,7 @@ import { AuthGuard } from '../commons/guards/auth.guard';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '3h' },
+      signOptions: { expiresIn: process.env.JWT_TIME_EXPIRATION },
     }),
   ],
   controllers: [AuthController],
